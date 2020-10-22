@@ -2,7 +2,7 @@
  * @Author: tangzhicheng
  * @Date: 2020-10-19 23:05:10
  * @LastEditors: tangzhicheng
- * @LastEditTime: 2020-10-19 23:17:14
+ * @LastEditTime: 2020-10-22 22:41:08
  * @Description: file content
 -->
 # api 文档
@@ -24,5 +24,5 @@
 | 获取博客详情  | /blog/detail | b_id | get |
 | 发表博客  | /blog/add | u_id, title, content  | post |
 | 修改博客  | /blog/update | u_id, b_id, title, content  | put |
-| 删除博客  | /blog/detail | u_id, b_id | delete |
+| 删除博客  | /blog/del | u_id, b_id | delete |
 

@@ -17,6 +17,7 @@
     "nodemon": "^2.0.5"
   },
   "dependencies": {
-    "mysql": "^2.18.1"
+    "mysql": "^2.18.1",
+    "redis": "^3.0.2"
   }
 }

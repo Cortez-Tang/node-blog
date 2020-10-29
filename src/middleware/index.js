@@ -2,12 +2,13 @@
  * @Author: tangzhicheng
  * @Date: 2020-10-26 22:24:14
  * @LastEditors: tangzhicheng
- * @LastEditTime: 2020-10-28 23:02:43
+ * @LastEditTime: 2020-10-29 19:57:09
  * @Description: file content
  */
 
 const qs = require('querystring');
-const { redisSet } = require('../db/redis')
+const user = require('../controller/user');
+const { redisSet, redisGet } = require('../db/redis')
 
 // 设置响应配置
 const setResponse = (res) => {
@@ -59,7 +60,7 @@ const cookieHandle = (req) => {
 };
 
 // 处理session
-const sessionHandle = (req, res) => {
+const sessionHandle = async (req, res) => {
   let userId = req.cookie.uid;
   if (!userId) {
     userId = `${Date.now()}_user_ds`;
@@ -67,6 +68,8 @@ const sessionHandle = (req, res) => {
     redisSet(userId, {});
   }
   req.sessionId = userId;
+  req.session = await redisGet(req.sessionId);
+  console.log('1--',req.session);
 };
 
 module.exports = {

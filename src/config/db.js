@@ -2,7 +2,7 @@
  * @Author: tangzhicheng
  * @Date: 2020-10-22 23:16:46
  * @LastEditors: tangzhicheng
- * @LastEditTime: 2020-10-28 22:47:18
+ * @LastEditTime: 2020-10-29 11:51:35
  * @Description: 数据库连接配置
  */
 const env = process.env.NODE_ENV;
@@ -13,9 +13,9 @@ let REDIS_CONFIG;
 
 if (env === 'development') {
   MYSQL_CONFIG = {
-    host: 'localhost',
+    host: '127.0.0.1',
     user: 'root',
-    password: '123456',
+    password: '',
     database: 'my_blog'
   }
 
@@ -29,7 +29,7 @@ if (env === 'development') {
 
 else if (env === 'production') {
   MYSQL_CONFIG = {
-    host: 'localhost',
+    host: '127.0.0.1',
     user: 'root',
     password: '123456',
     database: 'my_blog'

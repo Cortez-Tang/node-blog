@@ -2,7 +2,7 @@
  * @Author: ,: tangzhicheng
  * @Date: ,: 2020-09-14 20:03:01
  * @LastEditors: tangzhicheng
- * @LastEditTime: 2020-10-28 22:59:31
+ * @LastEditTime: 2020-10-29 19:58:11
  * @Description: ,: 应用周期
  */
 
@@ -17,7 +17,7 @@ const serverHandle = async (req, res) => {
   setResponse(res);
   queryHandle(req);
   cookieHandle(req);
-  sessionHandle(req, res)
+  await sessionHandle(req, res)
   await bodyHandle (req);
   console.log(req.path);
   const userResult = await userRouteHandle(req, res);

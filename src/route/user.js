@@ -2,7 +2,7 @@
  * @Author: tangzhicheng
  * @Date: 2020-10-22 21:57:37
  * @LastEditors: tangzhicheng
- * @LastEditTime: 2020-10-28 23:09:45
+ * @LastEditTime: 2020-10-29 19:57:17
  * @Description: 用户路由
  */
 
@@ -26,7 +26,8 @@ const userRouteHandle = async (req, res) => {
   }
 
   if (req.method === 'GET' && req.path === '/user/getInfo') {
-    const sessionData = await redisGet(req.sessionId);
+    const sessionData = req.session;
+    console.log('2--',req.session);
     if (!sessionData) {
       return new ErrorModel('尚未登录！');
     }

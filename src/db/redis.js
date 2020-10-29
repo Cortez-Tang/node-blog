@@ -2,7 +2,7 @@
  * @Author: tangzhicheng
  * @Date: 2020-10-28 22:47:30
  * @LastEditors: tangzhicheng
- * @LastEditTime: 2020-10-28 23:08:27
+ * @LastEditTime: 2020-10-29 19:57:31
  * @Description: file content
  */
 
@@ -38,6 +38,7 @@ const redisGet = (key) => {
       reject('key is not defined');
     }
     redisClient.get(key, (err, val) => {
+      console.log('0---',val);
       if (err) {
         reject(err);
       }

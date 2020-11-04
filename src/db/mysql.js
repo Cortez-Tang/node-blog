@@ -2,11 +2,13 @@
  * @Author: tangzhicheng
  * @Date: 2020-10-22 23:15:17
  * @LastEditors: tangzhicheng
- * @LastEditTime: 2020-10-25 15:53:57
+ * @LastEditTime: 2020-11-04 23:11:31
  * @Description: 数据库连接层
  */
 
 const mysql = require('mysql');
+
+mysql.escape
 
 const { MYSQL_CONFIG } = require('../config/db');
 
@@ -32,5 +34,6 @@ const exec = (sql) => {
 
 
 module.exports = {
-  exec
+  exec,
+  escape: mysql.escape
 };

@@ -2,13 +2,14 @@
  * @Author: tangzhicheng
  * @Date: 2020-10-22 21:57:37
  * @LastEditors: tangzhicheng
- * @LastEditTime: 2020-10-29 19:57:17
+ * @LastEditTime: 2020-11-03 18:55:52
  * @Description: 用户路由
  */
 
 const { SuccessModel, ErrorModel } = require('../model/resModel');
 const { findUserByUP, registerUserInfo, findUserByKey } = require('../controller/user');
-const { redisSet, redisGet } = require('../db/redis');
+const { redisSet } = require('../db/redis');
+
 
 const userRouteHandle = async (req, res) => {
   if (req.method === 'POST' &&  req.path === '/user/login') {
@@ -19,20 +20,19 @@ const userRouteHandle = async (req, res) => {
     const list = await findUserByUP(username, password);
     if (list.length > 0) {
       redisSet(req.sessionId, list[0]);
-      return new SuccessModel(true);
+      return new SuccessModel(list[0]);
     } else {
       return new ErrorModel('账号或密码错误！');
     }
   }
 
-  if (req.method === 'GET' && req.path === '/user/getInfo') {
-    const sessionData = req.session;
-    console.log('2--',req.session);
-    if (!sessionData) {
-      return new ErrorModel('尚未登录！');
-    }
-    return new SuccessModel(sessionData);
-  }
+  // if (req.method === 'GET' && req.path === '/user/getInfo') {
+  //   const sessionData = req.session;
+  //   if (!sessionData.username) {
+  //     return new ErrorModel('尚未登录！');
+  //   }
+  //   return new SuccessModel(sessionData);
+  // }
 
   if (req.method === 'POST' && req.path === '/user/register') {
     const { username, password, realname } = req.body;

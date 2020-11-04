@@ -1,9 +1,9 @@
 /**
- * @Author: ,: tangzhicheng
- * @Date: ,: 2020-09-14 20:03:01
+ * @Author: tangzhicheng
+ * @Date: 2020-09-14 20:03:01
  * @LastEditors: tangzhicheng
- * @LastEditTime: 2020-10-29 19:58:11
- * @Description: ,: 应用周期
+ * @LastEditTime: 2020-11-03 19:14:16
+ * @Description: 应用周期
  */
 
 const qs = require('querystring');
@@ -17,9 +17,8 @@ const serverHandle = async (req, res) => {
   setResponse(res);
   queryHandle(req);
   cookieHandle(req);
-  await sessionHandle(req, res)
+  await sessionHandle(req, res);
   await bodyHandle (req);
-  console.log(req.path);
   const userResult = await userRouteHandle(req, res);
   if (userResult) {
     return res.end(JSON.stringify(userResult));;
@@ -30,11 +29,9 @@ const serverHandle = async (req, res) => {
     return res.end(JSON.stringify(blogResult));
   }
 
-
+  res.statusCode = 404;
   return res.end(JSON.stringify(new ErrorModel('404')));
 }
-
-
 
 module.exports = {
   serverHandle

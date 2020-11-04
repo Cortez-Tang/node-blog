@@ -2,19 +2,30 @@
  * @Author: tangzhicheng
  * @Date: 2020-10-22 21:57:44
  * @LastEditors: tangzhicheng
- * @LastEditTime: 2020-10-25 15:53:45
+ * @LastEditTime: 2020-11-04 09:09:08
  * @Description: 博客路由
  */
 
 const { SuccessModel, ErrorModel } = require('../model/resModel');
 const { searchBlogs, addBlog, findBlogById, updateBlog, deleteBlog } = require('../controller/blog');
+const { checkLogin } = require('../middleware');
+
 
 const blogRouteHandle = async (req, res) => {
+  if (!req.path.includes('blog')) {
+    return false;
+  } 
+
+  if (!await checkLogin(req, res)) {
+    return new ErrorModel('请先登录!');
+  }
+
   if (req.method === 'GET' &&  req.path === '/blog/list')  {
     const { keyword, page, size, u_id } = req.query;
     if (!page) {
       return new ErrorModel('请输入必需填写的参数');
     }
+    
     const list = await searchBlogs(keyword, page, size || null, u_id || null); 
     return new SuccessModel(list);
   }
@@ -34,11 +45,12 @@ const blogRouteHandle = async (req, res) => {
   }
 
   if (req.method === 'POST' &&  req.path === '/blog/add')  {
-    const { u_id, title, content, username } = req.body;
-    if (!u_id || !title || !content || !username) {
+    const { u_id, title, content } = req.body;
+
+    if (!u_id || !title || !content) {
       return new ErrorModel('请输入必需填写的参数');
     }
-    const result = await addBlog(u_id, title, content, username);
+    const result = await addBlog(u_id, title, content, req.session.username);
     if (result.affectedRows === 1 && result.warningCount === 0) {
       return new SuccessModel(true);
     } else {
@@ -51,7 +63,7 @@ const blogRouteHandle = async (req, res) => {
     if (!id || !title || !content) {
       return new ErrorModel('请输入必需填写的参数');
     }
-    const result = await updateBlog(id, title, content);
+    const result = await updateBlog(req.session.id, id, title, content);
     if (result.affectedRows === 1 && result.warningCount === 0) {
       return new SuccessModel(result);
     } else {

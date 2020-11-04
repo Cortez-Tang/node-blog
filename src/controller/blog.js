@@ -2,7 +2,7 @@
  * @Author: tangzhicheng
  * @Date: 2020-10-22 23:05:48
  * @LastEditors: tangzhicheng
- * @LastEditTime: 2020-10-25 01:20:02
+ * @LastEditTime: 2020-11-04 08:52:03
  * @Description: 博客控制层
  */
 
@@ -58,9 +58,10 @@ const addBlog = async (u_id, title, content, username) => {
  * @param {*} id 
  * @param {*} title 
  * @param {*} content 
+ * @param {*} u_id
  */
-const updateBlog = async (id, title, content) => {
-  const sql = `update blogs set title='${title}', content='${content}' where id=${id};`;
+const updateBlog = async (u_id, id, title, content) => {
+  const sql = `update blogs set title='${title}', content='${content}' where id=${id} and u_id=${u_id};`;
   const result = await exec(sql);
   return result;
 };

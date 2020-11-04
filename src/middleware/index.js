@@ -2,7 +2,7 @@
  * @Author: tangzhicheng
  * @Date: 2020-10-26 22:24:14
  * @LastEditors: tangzhicheng
- * @LastEditTime: 2020-10-29 19:57:09
+ * @LastEditTime: 2020-11-04 09:10:32
  * @Description: file content
  */
 
@@ -46,6 +46,7 @@ const bodyHandle = (req) => {
 const cookieHandle = (req) => {
   const cookie = {};
   const cookieStr = req.headers.cookie;
+
   if (!cookieStr) {
     req.cookie = cookie;
     return;
@@ -63,13 +64,21 @@ const cookieHandle = (req) => {
 const sessionHandle = async (req, res) => {
   let userId = req.cookie.uid;
   if (!userId) {
+    const expiresDate = new Date(Date.now() + 24 * 60 * 60 * 1000).toGMTString();
     userId = `${Date.now()}_user_ds`;
-    res.setHeader('Set-Cookie', `uid=${userId}; path=/; httpOnly`);
+    res.setHeader('Set-Cookie', `uid=${userId}; path=/; expires=${expiresDate}; httpOnly`);
     redisSet(userId, {});
   }
   req.sessionId = userId;
-  req.session = await redisGet(req.sessionId);
-  console.log('1--',req.session);
+  req.session = await redisGet(req.sessionId) || {};
+};
+
+const checkLogin = async (req, res) => {
+  if (req.session.username) {
+    return true;
+  }
+  res.statusCode = 401;
+  return false;
 };
 
 module.exports = {
@@ -77,5 +86,6 @@ module.exports = {
   queryHandle,
   bodyHandle,
   cookieHandle,
-  sessionHandle
+  sessionHandle,
+  checkLogin
 };

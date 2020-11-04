@@ -2,7 +2,7 @@
  * @Author: tangzhicheng
  * @Date: 2020-10-22 23:05:48
  * @LastEditors: tangzhicheng
- * @LastEditTime: 2020-11-04 08:52:03
+ * @LastEditTime: 2020-11-04 13:57:42
  * @Description: 博客控制层
  */
 
@@ -15,7 +15,7 @@ const { exec } = require('../db/mysql');
  * @param {*} size 
  * @param {*} u_id
  */
-const searchBlogs = async (keyword, page, u_id, size) => {
+const searchBlogs = async (keyword, page, size , u_id) => {
   const _size = size || 10;
   const startIndex = (page - 1) * size;
 

@@ -2,7 +2,7 @@
  * @Author: tangzhicheng
  * @Date: 2020-10-22 21:57:37
  * @LastEditors: tangzhicheng
- * @LastEditTime: 2020-11-03 18:55:52
+ * @LastEditTime: 2020-11-04 10:01:39
  * @Description: 用户路由
  */
 
@@ -12,7 +12,7 @@ const { redisSet } = require('../db/redis');
 
 
 const userRouteHandle = async (req, res) => {
-  if (req.method === 'POST' &&  req.path === '/user/login') {
+  if (req.method === 'POST' &&  req.path === '/api/user/login') {
     const { username, password } = req.body;
     if (!username || !password) {
       return new ErrorModel('请输入必需填写的参数');
@@ -34,7 +34,7 @@ const userRouteHandle = async (req, res) => {
   //   return new SuccessModel(sessionData);
   // }
 
-  if (req.method === 'POST' && req.path === '/user/register') {
+  if (req.method === 'POST' && req.path === '/api/user/register') {
     const { username, password, realname } = req.body;
     if (!username || !password || !realname) {
       return new ErrorModel('请输入必需填写的参数');

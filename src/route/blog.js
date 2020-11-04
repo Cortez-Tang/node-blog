@@ -2,7 +2,7 @@
  * @Author: tangzhicheng
  * @Date: 2020-10-22 21:57:44
  * @LastEditors: tangzhicheng
- * @LastEditTime: 2020-11-04 09:09:08
+ * @LastEditTime: 2020-11-04 14:04:42
  * @Description: 博客路由
  */
 
@@ -20,7 +20,7 @@ const blogRouteHandle = async (req, res) => {
     return new ErrorModel('请先登录!');
   }
 
-  if (req.method === 'GET' &&  req.path === '/blog/list')  {
+  if (req.method === 'GET' &&  req.path === '/api/blog/list')  {
     const { keyword, page, size, u_id } = req.query;
     if (!page) {
       return new ErrorModel('请输入必需填写的参数');
@@ -30,7 +30,7 @@ const blogRouteHandle = async (req, res) => {
     return new SuccessModel(list);
   }
 
-  if (req.method === 'GET' &&  req.path === '/blog/detail')  {
+  if (req.method === 'GET' &&  req.path === '/api/blog/detail')  {
     const { id } = req.query; 
     if (!id) {
       return new ErrorModel('请输入必需填写的参数');
@@ -44,13 +44,13 @@ const blogRouteHandle = async (req, res) => {
     }
   }
 
-  if (req.method === 'POST' &&  req.path === '/blog/add')  {
-    const { u_id, title, content } = req.body;
+  if (req.method === 'POST' &&  req.path === '/api/blog/add')  {
+    const { title, content } = req.body;
 
-    if (!u_id || !title || !content) {
+    if (!title || !content) {
       return new ErrorModel('请输入必需填写的参数');
     }
-    const result = await addBlog(u_id, title, content, req.session.username);
+    const result = await addBlog(req.session.id, title, content, req.session.username);
     if (result.affectedRows === 1 && result.warningCount === 0) {
       return new SuccessModel(true);
     } else {
@@ -58,7 +58,7 @@ const blogRouteHandle = async (req, res) => {
     }
   }
 
-  if (req.method === 'PUT' &&  req.path === '/blog/update') {
+  if (req.method === 'PUT' &&  req.path === '/api/blog/update') {
     const { id, title, content } = req.body;
     if (!id || !title || !content) {
       return new ErrorModel('请输入必需填写的参数');
@@ -71,7 +71,7 @@ const blogRouteHandle = async (req, res) => {
     }
   }
 
-  if (req.method === 'DELETE' &&  req.path === '/blog/del') {
+  if (req.method === 'DELETE' &&  req.path === '/api/blog/del') {
     const { id } = req.query;
     if (!id) {
       return new ErrorModel('请输入必需填写的参数');

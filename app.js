@@ -1,45 +1,74 @@
 /**
  * @Author: tangzhicheng
- * @Date: 2020-09-14 20:03:01
+ * @Date: 2020-11-07 20:32:38
  * @LastEditors: tangzhicheng
- * @LastEditTime: 2020-11-04 19:50:05
- * @Description: 应用周期
+ * @LastEditTime: 2020-11-09 22:54:13
+ * @Description: file content
  */
+const createError = require('http-errors');
+const express = require('express');
+const cookieParser = require('cookie-parser');
+const logger = require('morgan');
+const session = require('express-session');
+const fs = require('fs');
+const path = require('path');
 
-const qs = require('querystring');
-const { userRouteHandle } = require('./src/route/user');
-const { blogRouteHandle } = require('./src/route/blog');
-const { ErrorModel } = require('./src/model/resModel');
-const { setResponse, queryHandle, bodyHandle, cookieHandle, sessionHandle } = require('./src/middleware');
-const { access } = require('./src/utils/log');
 
+const userRouter = require('./src/routes/user');
+const blogRouter = require('./src/routes/blog');
 
-const serverHandle = async (req, res) => {
-  // 记录日志
-  access(`${req.method} -- ${req.url} -- ${req.headers['user-agent']} -- ${Date.now()}`);
+const app = express();
 
-  // 处理请求数据和配置
-  setResponse(res);
-  queryHandle(req);
-  cookieHandle(req);
-  await sessionHandle(req, res);
-  await bodyHandle (req);
-
-  // 处理路由
-  const userResult = await userRouteHandle(req, res);
-  if (userResult) {
-    return res.end(JSON.stringify(userResult));;
-  }
-
-  const blogResult = await blogRouteHandle(req, res);
-  if (blogResult) {
-    return res.end(JSON.stringify(blogResult));
-  }
-
-  res.statusCode = 404;
-  return res.end(JSON.stringify(new ErrorModel('404')));
+if (process.env.NODE_ENV === 'development') {
+  app.use(logger('dev'));
+} else {
+  const filename = path.join(__dirname, 'logs', 'access.log');
+  const accessWriteStream = fs.createWriteStream(filename, {
+    flags: 'a'
+  });
+  app.use(logger('combined', {
+    stream: accessWriteStream
+  }));
 }
 
-module.exports = {
-  serverHandle
-};
+app.use(express.json());
+app.use(express.urlencoded({ extended: false }));
+app.use(cookieParser());
+
+// 产生一个会话id存在cookie中并为之创建对应的session对象
+const RedisStore = require('connect-redis')(session);
+const { redisClient } = require('./src/db/redis');
+const e = require('express');
+const sessionStore = new RedisStore({
+  client: redisClient
+});
+app.use(session({
+  secret: 'swqe24sd$',
+  saveUninitialized: true,
+  resave: false,
+  cookie: {
+    maxAge: 24 * 3600 * 1000
+  },
+  store: sessionStore
+}));
+
+app.use('/api/user', userRouter);
+app.use('/api/blog', blogRouter);
+
+// catch 404 and forward to error handler
+app.use(function(req, res, next) {
+  next(createError(404));
+});
+
+// error handler
+app.use(function(err, req, res, next) {
+  // set locals, only providing error in development
+  res.locals.message = err.message;
+  res.locals.error = req.app.get('env') === 'development' ? err : {};
+
+  // render the error page
+  res.status(err.status || 500);
+  res.render('error');
+});
+
+module.exports = app;

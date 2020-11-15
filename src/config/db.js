@@ -2,7 +2,7 @@
  * @Author: tangzhicheng
  * @Date: 2020-10-22 23:16:46
  * @LastEditors: tangzhicheng
- * @LastEditTime: 2020-11-04 19:50:27
+ * @LastEditTime: 2020-11-07 20:40:23
  * @Description: 数据库连接配置
  */
 const env = process.env.NODE_ENV;

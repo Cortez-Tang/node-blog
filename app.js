@@ -2,7 +2,7 @@
  * @Author: tangzhicheng
  * @Date: 2020-09-14 20:03:01
  * @LastEditors: tangzhicheng
- * @LastEditTime: 2020-11-29 18:09:45
+ * @LastEditTime: 2020-11-29 18:14:27
  * @Description: 应用周期
  */
 
@@ -50,6 +50,8 @@ const serverHandle = async (req, res) => {
 };
 
 const func = () => {};
+
+const test = "";
 
 module.exports = {
   serverHandle,

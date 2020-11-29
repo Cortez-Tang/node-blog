@@ -40,6 +40,8 @@ const serverHandle = async (req, res) => {
   return res.end(JSON.stringify(new ErrorModel('404')));
 }
 
+const test = '';
+
 module.exports = {
   serverHandle
 };
